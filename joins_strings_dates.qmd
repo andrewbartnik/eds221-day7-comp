@@ -102,3 +102,22 @@ island_to_loc <- penguins |>
   #group_by(sex) |> 
   #mutate(mean = mean(flipper_length_mm), sd = sd(flipper_length_mm), ss = n(flipper_length_mm))
 ```
+
+```{r}
+feedback <- c("  I ate      some                          nachos", "Wednesday         morning    ")
+
+str_trim(feedback)
+str_squish(feedback)
+
+
+
+#str_to
+
+str_to_lower(feedback)
+str_to_upper(feedback)
+str_to_title(feedback)
+str_to_sentence(feedback)
+
+starwars_lc <- starwars |> 
+  mutate(name_lower = str_to_lower(name))
+```

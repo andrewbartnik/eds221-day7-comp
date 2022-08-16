@@ -4,23 +4,141 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Dates with lubridate
 
 ```{r}
-1 + 1
-```
+library(tidyverse)
+library(lubridate)
 
-You can add options to executable code like this
+```
 
 ```{r}
-#| echo: false
-2 * 2
+my_date <- "1996-10-25"
+
+bday <- lubridate::ymd(my_date)
+
+date_2 <- "08-Jun-1974"
+
+date_4 <- lubridate::dmy(date_2)
+
+date_3 <- lubridate::ymd("19610518")
+
+lubridate::ymd("1942-08-30")
+
+lubridate::dmy("09/22/84")
+
+time <- "2020-08-12 11:18"
+
+time <- ymd_hm(time)
+
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+Time zones
+
+```{r}
+
+#converting time to LA time
+with_tz(time, "America/Los_Angeles")
+
+with_tz(bday, "Australia/Sydney")
+
+with_tz(bday, "Europe/London")
+
+with_tz(bday, "Asia/Jakarta")
+
+```
+
+lubridate functions
+
+```{r}
+my_time <- lubridate::ymd_hms(time)
+
+year(my_time)
+day(my_time)
+month(my_time)
+
+hour(my_time)
+minute(my_time)
+second(my_time)
+
+
+teddy_bday <- lubridate::ymd("2017-06-15")
+
+wday(teddy_bday, label = TRUE)
+
+wday(bday, label = TRUE)
+
+week(bday)
+```
+
+```{r}
+urchin_counts_ymd <- tribble(
+  ~date, ~species, ~size_mm, 
+  "10/3/2020", "purple", 55,
+  "10/4/2020", "red", 48,
+  "11/17/2020", "red", 67
+  )
+
+urchin_ymd <- urchin_counts_ymd |> 
+  mutate(date = mdy(date)) |> 
+  mutate(year = year(date), 
+         month = month(date), 
+         day = day(date))
+
+day_1 <- ymd("2020-01-06")
+day_2 <- ymd("2020-05-18")
+interval<- interval(day_1, day_2)
+
+time_length(interval, "year")
+
+```
+
+```{r}
+my_string <- "Teddy loves eating salmon and socks"
+
+my_string |> 
+  str_detect("love")
+
+my_string |> 
+  str_detect("pup")
+
+string <- c("burrito", "fish taco", "taco salad")
+
+string |> 
+  str_detect("fish")
+```
+
+```{r}
+skywalker <- starwars |> 
+  filter(str_detect(name, pattern = "Skywalker"))
+
+
+maul <- starwars |> 
+  filter(str_detect(name, pattern = "Maul"))
+```
+
+```{r}
+#"blue" in eye color
+
+blue <- starwars |> 
+  filter(str_detect(eye_color, pattern = "blue"))
+
+
+```
+
+#### str_replace to replace string patterns
+
+```{r}
+fire_walkers <- starwars |> 
+  mutate(firewalkers = str_replace(name, replacement = "Fire", pattern ="Sky"))
+```
+
+## case_when()
+
+```{r}
+robot <- starwars |> 
+  mutate(robot = case_when(
+    species == "Droid" ~ "A ROBOT!!",
+    species == "Human" ~ "It's a human!",
+    TRUE ~ "This is something else."))
+```

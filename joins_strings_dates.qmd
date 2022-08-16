@@ -6,12 +6,99 @@ editor: visual
 
 # Joins
 
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+```
+
+```{r}
+animals <- tibble::tribble(
+        ~location,   ~species,  ~maturity,
+        "lagoon",   "bobcat",    "adult",
+         "bluff",   "coyote", "juvenile",
+         "creek",      "fox",    "adult",
+          "oaks", "squirrel", "juvenile",
+         "bluff",   "bobcat",    "adult"
+        )
+
+sites <- tibble::tribble(
+           ~location,      ~full_site_name, ~jurisdiction,
+            "beach",       "Goleta Beach",     "SB City",
+           "lagoon",        "UCSB Lagoon",        "UCSB",
+            "bluff",       "Ellwood Mesa",     "SB City",
+             "oaks", "Fremont Campground",        "USFS"
+           )
+
+
+```
+
 ## Full Join
+
+```{r}
+full_join_ex <- full_join(animals, sites, by = "location")
+```
 
 ## Left join
 
+```{r}
+left_join_ex <- left_join(animals, sites, by = "location")
+```
+
 ## Inner join
+
+```{r}
+inner_join_ex <- inner_join(animals, sites, by = "location")
+```
+
+```{r}
+sites_2 <- sites |> 
+  rename(loc = location)
+```
+
+Example of joining when key variables have non-matching names
+
+```{r}
+nonmatching <- full_join(animals, sites_2, by = c("location" = "loc"))
+```
+
+# Filtering joins - no column added
 
 ## Semi Join
 
-## Anti join
+```{r}
+semi_join_example <- semi_join(animals, sites, by = "location")
+
+```
+
+## Anti join - only returns rows in x that dont have a match in y
+
+```{r}
+anti_join_example <- anti_join(animals, sites, by = "location")
+```
+
+# Wrangling cont
+
+```{r}
+briscoe_dream <- penguins |> 
+  filter(island %in% c("Briscoe", "Dream"))
+
+no_year <- penguins |> 
+  select(-year, -sex)
+
+new_col <- penguins |> 
+  mutate(body_mass_kg = body_mass_g / 1000)
+
+island_to_loc <- penguins |> 
+  rename(location = island)
+
+
+
+
+#Part 2
+
+#filtered <- penguins |> 
+  #filter(species == "Adelie") |> 
+  #filter(!is.na(flipper_length_mm)) |> 
+  #group_by(sex) |> 
+  #mutate(mean = mean(flipper_length_mm), sd = sd(flipper_length_mm), ss = n(flipper_length_mm))
+```
